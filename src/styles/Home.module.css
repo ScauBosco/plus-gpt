@@ -1,0 +1,11 @@
+.container {
+  min-height: 100vh;
+  padding: 0 0.5rem;
+}
+.input_url {
+  padding: 20px;
+  margin: 30px 20px;
+  border: solid 1px blue;
+  border-radius: 5px;
+  width: -webkit-fill-available;
+}
