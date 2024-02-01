@@ -8,6 +8,7 @@ import OpenAI from 'openai';
 import { throwApiError } from '@/constant/errorCode';
 import { apiErrorHandler } from '@/util/apiErrorHandler';
 
+export const maxDuration = 60
 function getParameterFromUrl(urlString: string, parameter: string) {
     const urlObj = parse(urlString, true);
     return (urlObj.query[parameter] ?? '') as string;
