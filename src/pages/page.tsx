@@ -39,6 +39,17 @@ const Essay: NextPage<any> = () => {
       throw error;
     }
   };
+  const asyncEvent2 = async () => {
+    let res = null;
+    try {
+      res = await axios.post(`/api/urlToEssay_v2`, {
+        prompt,
+      });
+      setEssay(res.data);
+    } catch (error) {
+      throw error;
+    }
+  };
   const getSeriesUrls = async () => {
     let res = null;
     try {
@@ -99,6 +110,9 @@ const Essay: NextPage<any> = () => {
         />
         <button onClick={asyncEvent}>
           {essay ? "重新生成" : "确认生成"}
+        </button>
+        <button onClick={asyncEvent2}>
+          当作gpt使用
         </button>
         {essay && (
           <div className={styles.input_url}>

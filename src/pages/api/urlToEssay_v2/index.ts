@@ -53,31 +53,15 @@ async function chat(
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  let prompt = "";
+  let promptText = "";
   if (req.method === "POST") {
     // 解析POST请求体
     const data = req.body;
-    prompt = data.prompt;
+    promptText = data.prompt;
   }
-  let { videoUrl = "" } = req.query;
-  const videoID = getParameterFromUrl(videoUrl as string, "v"); // 获取视频ID
-  const result: CaptionsItem[] = await getSubtitles({
-    videoID,
-    lang: "en", // 你可以指定你想要的语言
-  });
-  const captionsText = result
-    .map((el) => `${el.text} - time:${el.start}`)
-    .filter((el) => !el.includes("[Music]"));
-  const promptText = getPromptText({
-    captains: captionsText.join("\n"),
-    prompt,
-    appendTime: true,
-    videoUrl: videoUrl as string,
-  });
-  console.log("promptText", promptText);
+  console.log("promptText2", promptText);
   const chatEssay = await getChatMsg(promptText);
   res.setHeader("Content-Type", "application/json; charset=utf-8");
-  // res.setHeader('Authorization', 'Bearer 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');
   return chatEssay?.content;
 };
 async function getChatMsg(doWhat: string) {

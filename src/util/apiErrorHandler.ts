@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 export const config = {
-  maxDuration: 60,
+  maxDuration: 10,
 };
 export const apiErrorHandler =
   (fn: any) => async (req: NextApiRequest, res: NextApiResponse) => {
