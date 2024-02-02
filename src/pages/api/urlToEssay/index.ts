@@ -7,14 +7,15 @@ import {RequestOptions} from 'openai/core';
 import OpenAI from 'openai';
 import { throwApiError } from '@/constant/errorCode';
 import { apiErrorHandler } from '@/util/apiErrorHandler';
+import { APIKEY, BASEURL } from '@/constant/config';
 
 function getParameterFromUrl(urlString: string, parameter: string) {
     const urlObj = parse(urlString, true);
     return (urlObj.query[parameter] ?? '') as string;
 }
 const openai = new OpenAI({
-    apiKey: 'sk-OZIo76FU51NfLGOg1g1OEMlcvz2CFItk3vyEz46VLGwHaDom',
-    baseURL: 'https://api.chatanywhere.tech',
+    apiKey: APIKEY,
+    baseURL: BASEURL,
 });
 const roleDuty = 'You are a helpful assistant designed to output essay';
 const DEFAULT_PROMPT
