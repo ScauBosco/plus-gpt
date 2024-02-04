@@ -2,6 +2,7 @@ import Head from "next/head";
 import { NextPage } from "next";
 import Layout from "../components/Layout";
 import styles from "../styles/Home.module.css";
+import ReactMarkdown from "react-markdown";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
