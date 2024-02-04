@@ -20,6 +20,7 @@ const Essay: NextPage<any> = () => {
   const [prompt, setPrompt] = useState();
   const [urls, setUrls] = useState<string[]>();
   const contentRef = useRef("");
+  const essayRef = useRef("");
   const urlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.currentTarget.value;
     setUrl(inputValue);
@@ -44,20 +45,31 @@ const Essay: NextPage<any> = () => {
     }
   };
   const asyncEvent2 = async () => {
-    let res = null;
-    try {
-      res = await axios.post(`/api/chat-sse`, {
+    const ctrl2 = new AbortController();
+    fetchEventSource(`/api/urlToEssay_v2?videoUrl=${url}`, {
+      method: "POST",
+      body: JSON.stringify({
         prompt,
-      });
-      setEssay(res.data);
-    } catch (error) {
-      throw error;
-    }
+      }),
+      signal: ctrl2.signal,
+      onmessage: (event) => {
+        console.log(essayRef.current)
+        essayRef.current += JSON.parse(event.data);
+      },
+      onerror: (event) => {
+        console.log("asyncEvent2", event);
+        throw event;
+      },
+      onclose: () => {
+        setEssay(essayRef.current);
+        essayRef.current=''
+        ctrl2.abort()
+      },
+    });
   };
 
   const asyncEvent3 = async () => {
     const ctrl = new AbortController();
-    console.log("event", "流式数据1");
     fetchEventSource("/api/chat-sse", {
       method: "POST",
       body: JSON.stringify({
@@ -66,6 +78,7 @@ const Essay: NextPage<any> = () => {
       signal: ctrl.signal,
       onmessage: (event) => {
         // setEssay(data.chioces[0].content);
+        console.log(contentRef.current)
         contentRef.current += JSON.parse(event.data);
         // setTypewriterValue(pre=>pre+JSON.parse(event.data));
       },
@@ -141,9 +154,9 @@ const Essay: NextPage<any> = () => {
           onChange={promptChange}
           placeholder="请输入prompt,1~300个字符"
         />
-        <button onClick={asyncEvent}>{essay ? "重新生成" : "确认生成"}</button>
-        <button onClick={asyncEvent2}>当作gpt使用</button>
-        <button onClick={asyncEvent3}>测试流式数据</button>
+        <button onClick={asyncEvent}>{(essay ? "重新生成" : "确认生成")+' 旧版'}</button>
+        <button onClick={asyncEvent2}>流式返回数据，点击最新版</button>
+        <button onClick={asyncEvent3}>当作gpt使用</button>
         {essay && (
           <div className={styles.input_url}>
             <ReactMarkdown>{essay}</ReactMarkdown>

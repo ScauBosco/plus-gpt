@@ -30,7 +30,7 @@ export default async function handler(
   req.on("close", () => {
     res.end();
   });
-
+  console.log("prompt",prompt)
   try {
     // 发起请求到 OpenAI 的接口
     const response = await openai.chat.completions.create({
@@ -48,10 +48,6 @@ export default async function handler(
       console.log(message)
       res.write(`data: ${JSON.stringify(message)}\n\n`);
     }
-    // res.write(`data: ${JSON.stringify(response)}\n\n`);
-    // res.write(`data: ${JSON.stringify(response)}\n\n`);
-    // res.write(`data: ${JSON.stringify(response)}\n\n`);
-    // res.write(JSON.stringify({response}));
   } catch (e) {
     res.write(e);
     res.end();
