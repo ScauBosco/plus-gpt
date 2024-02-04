@@ -3,8 +3,10 @@ import { NextPage } from "next";
 import Layout from "../components/Layout";
 import styles from "../styles/Home.module.css";
 import axios from "axios";
-import { useState } from "react";
+import Typewriter from "typewriter-effect";
+import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { fetchEventSource } from "@microsoft/fetch-event-source";
 
 const DEFAULT_VIDEO_URL =
   "https://www.youtube.com/watch?v=BIpz9Hdjm_A&list=PLNYkxOF6rcIAcezfL8q0rjt13ufKseL5X";
@@ -12,10 +14,12 @@ const DEFAULT_VIDEO_URLS =
   "https://www.youtube.com/playlist?list=PLNYkxOF6rcIAcezfL8q0rjt13ufKseL5X";
 const Essay: NextPage<any> = () => {
   const [essay, setEssay] = useState<any>();
+  const [typewriterValue, setTypewriterValue] = useState<string>();
   const [url, setUrl] = useState(DEFAULT_VIDEO_URL);
   const [listUrls, setListUrls] = useState(DEFAULT_VIDEO_URLS);
   const [prompt, setPrompt] = useState();
   const [urls, setUrls] = useState<string[]>();
+  const contentRef = useRef("");
   const urlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.currentTarget.value;
     setUrl(inputValue);
@@ -39,6 +43,43 @@ const Essay: NextPage<any> = () => {
       throw error;
     }
   };
+  const asyncEvent2 = async () => {
+    let res = null;
+    try {
+      res = await axios.post(`/api/chat-sse`, {
+        prompt,
+      });
+      setEssay(res.data);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const asyncEvent3 = async () => {
+    const ctrl = new AbortController();
+    console.log("event", "流式数据1");
+    fetchEventSource("/api/chat-sse", {
+      method: "POST",
+      body: JSON.stringify({
+        prompt,
+      }),
+      signal: ctrl.signal,
+      onmessage: (event) => {
+        // setEssay(data.chioces[0].content);
+        contentRef.current += JSON.parse(event.data);
+        // setTypewriterValue(pre=>pre+JSON.parse(event.data));
+      },
+      onerror: (event) => {
+        // aiChat.pushMessage("assistant", "请求失败" + event?.message);
+        console.log("qingqiushibai", event);
+        throw event;
+      },
+      onclose: () => {
+        setTypewriterValue(contentRef.current);
+        contentRef.current=''
+      },
+    });
+  };
   const getSeriesUrls = async () => {
     let res = null;
     try {
@@ -51,6 +92,9 @@ const Essay: NextPage<any> = () => {
       throw e;
     }
   };
+  useEffect(() => {
+    contentRef.current = "";
+  }, []);
   return (
     <div className={styles.container}>
       <Head>
@@ -97,12 +141,17 @@ const Essay: NextPage<any> = () => {
           onChange={promptChange}
           placeholder="请输入prompt,1~300个字符"
         />
-        <button onClick={asyncEvent}>
-          {essay ? "重新生成" : "确认生成"}
-        </button>
+        <button onClick={asyncEvent}>{essay ? "重新生成" : "确认生成"}</button>
+        <button onClick={asyncEvent2}>当作gpt使用</button>
+        <button onClick={asyncEvent3}>测试流式数据</button>
         {essay && (
           <div className={styles.input_url}>
             <ReactMarkdown>{essay}</ReactMarkdown>
+          </div>
+        )}
+        {typewriterValue && (
+          <div className={styles.input_url}>
+            <ReactMarkdown>{typewriterValue}</ReactMarkdown>
           </div>
         )}
       </Layout>
