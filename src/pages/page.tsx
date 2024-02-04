@@ -4,7 +4,6 @@ import Layout from "../components/Layout";
 import styles from "../styles/Home.module.css";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 
 const DEFAULT_VIDEO_URL =
