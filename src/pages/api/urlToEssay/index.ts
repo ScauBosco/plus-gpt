@@ -1,12 +1,13 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { getSubtitles } from "youtube-captions-scraper";
-import { parse } from "url";
-import { CaptionsItem } from "./interface";
-import { ChatCompletionCreateParamsNonStreaming } from "openai/resources/chat/completions";
-import { RequestOptions } from "openai/core";
-import OpenAI from "openai";
-import { throwApiError } from "@/constant/errorCode";
-import { apiErrorHandler } from "@/util/apiErrorHandler";
+import {NextApiRequest, NextApiResponse} from 'next';
+import {getSubtitles} from 'youtube-captions-scraper';
+import {parse} from 'url';
+import {CaptionsItem} from './interface';
+import {ChatCompletionCreateParamsNonStreaming} from 'openai/resources/chat/completions';
+import {RequestOptions} from 'openai/core';
+import OpenAI from 'openai';
+import { throwApiError } from '@/constant/errorCode';
+import { apiErrorHandler } from '@/util/apiErrorHandler';
+import { APIKEY, BASEURL } from '@/constant/config';
 
 export const config = {
   maxDuration: 10,
@@ -16,8 +17,8 @@ function getParameterFromUrl(urlString: string, parameter: string) {
   return (urlObj.query[parameter] ?? "") as string;
 }
 const openai = new OpenAI({
-  apiKey: "sk-OZIo76FU51NfLGOg1g1OEMlcvz2CFItk3vyEz46VLGwHaDom",
-  baseURL: "https://api.chatanywhere.tech",
+    apiKey: APIKEY,
+    baseURL: BASEURL,
 });
 const roleDuty = "You are a helpful assistant designed to output essay";
 const DEFAULT_PROMPT =
