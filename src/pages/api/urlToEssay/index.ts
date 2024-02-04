@@ -1,13 +1,13 @@
-import {NextApiRequest, NextApiResponse} from 'next';
-import {getSubtitles} from 'youtube-captions-scraper';
-import {parse} from 'url';
-import {CaptionsItem} from './interface';
-import {ChatCompletionCreateParamsNonStreaming} from 'openai/resources/chat/completions';
-import {RequestOptions} from 'openai/core';
-import OpenAI from 'openai';
-import { throwApiError } from '@/constant/errorCode';
-import { apiErrorHandler } from '@/util/apiErrorHandler';
-import { APIKEY, BASEURL } from '@/constant/config';
+import { NextApiRequest, NextApiResponse } from "next";
+import { getSubtitles } from "youtube-captions-scraper";
+import { parse } from "url";
+import { CaptionsItem } from "./interface";
+import { ChatCompletionCreateParamsNonStreaming } from "openai/resources/chat/completions";
+import { RequestOptions } from "openai/core";
+import OpenAI from "openai";
+import { throwApiError } from "@/constant/errorCode";
+import { apiErrorHandler } from "@/util/apiErrorHandler";
+import { APIKEY, BASEURL } from "@/constant/config";
 
 export const config = {
   maxDuration: 10,
@@ -78,7 +78,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   console.log("promptText", promptText);
   const chatEssay = await getChatMsg(promptText);
   res.setHeader("Content-Type", "application/json; charset=utf-8");
-  // res.setHeader('Authorization', 'Bearer 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');
   return chatEssay?.content;
 };
 async function getChatMsg(doWhat: string) {

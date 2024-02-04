@@ -77,7 +77,6 @@ const Essay: NextPage<any> = () => {
       signal: ctrl.signal,
       onmessage: (event) => {
         // setEssay(data.chioces[0].content);
-        console.log(contentRef.current)
         contentRef.current += JSON.parse(event.data);
         // setTypewriterValue(pre=>pre+JSON.parse(event.data));
       },

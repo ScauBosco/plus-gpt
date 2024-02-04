@@ -30,7 +30,6 @@ export default async function handler(
   req.on("close", () => {
     res.end();
   });
-  console.log("prompt",prompt)
   try {
     // 发起请求到 OpenAI 的接口
     const response = await openai.chat.completions.create({
