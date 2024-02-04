@@ -44,7 +44,7 @@ export default async function handler(
     // 将数据流式地发送到客户端
     for await (const chunk of response) {
       let message = chunk.choices[0]?.delta?.content || "";
-      console.log(message)
+      console.log(message);
       res.write(`data: ${JSON.stringify(message)}\n\n`);
     }
   } catch (e) {
