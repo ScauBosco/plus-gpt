@@ -7,3 +7,9 @@ export interface CaptionsItem{
     dur: string;
     text: string;
 }
+export interface getPromptTextParams {
+    captains: string;
+    prompt?: string;
+    appendTime: boolean;
+    videoUrl?: string;
+  }
