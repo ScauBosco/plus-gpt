@@ -52,11 +52,10 @@ const Essay: NextPage<any> = () => {
       }),
       signal: ctrl2.signal,
       onmessage: (event) => {
-        console.log(essayRef.current)
         essayRef.current += JSON.parse(event.data);
       },
       onerror: (event) => {
-        console.log("asyncEvent2", event);
+        // console.log("asyncEvent2", event);
         throw event;
       },
       onclose: () => {
@@ -82,7 +81,7 @@ const Essay: NextPage<any> = () => {
       },
       onerror: (event) => {
         // aiChat.pushMessage("assistant", "请求失败" + event?.message);
-        console.log("qingqiushibai", event);
+        // console.log("qingqiushibai", event);
         throw event;
       },
       onclose: () => {
@@ -103,9 +102,6 @@ const Essay: NextPage<any> = () => {
       throw e;
     }
   };
-  useEffect(() => {
-    contentRef.current = "";
-  }, []);
   return (
     <div className={styles.container}>
       <Head>
@@ -152,8 +148,8 @@ const Essay: NextPage<any> = () => {
           onChange={promptChange}
           placeholder="请输入prompt,1~300个字符"
         />
-        <button onClick={asyncEvent}>{(essay ? "重新生成" : "确认生成")+' 旧版'}</button>
-        <button onClick={asyncEvent2}>流式返回数据，点击最新版</button>
+        <button onClick={asyncEvent}>旧版，vercel会限制接口等待时间</button>
+        <button onClick={asyncEvent2}>{(typewriterValue ? "重新生成" : "确认生成")+' 流式返回数据，点击最新版'}</button>
         <button onClick={asyncEvent3}>当作gpt使用</button>
         {essay && (
           <div className={styles.input_url}>

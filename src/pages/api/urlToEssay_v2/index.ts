@@ -26,7 +26,7 @@ const getPromptText = (data: getPromptTextParams) => `
     ${
       data.appendTime &&
       `在生成文章时，把时间以[time]的形式添加到句子末尾，选这一句话或者这一个描述点涉及到的这个字幕的时间段的开始时间.
-    请一定要按照以下格式拼接到对应句子末尾，而不是文段末尾！
+    请注意，这里是关键，一定要按照以下格式拼接到对应句子末尾，而不是文段末尾!!
     [time](${data.videoUrl}&t=[time]s)
     例如：一开始我们就在这里[3.319](${data.videoUrl}&t=3.319s),后面我们去了那里[6.96](${data.videoUrl}&t=6.96s)。
     `
@@ -49,7 +49,7 @@ export default async function handler(
   if (req.method === "POST") {
     // 解析POST请求体
     const data = JSON.parse(req.body);
-    console.log("req.body", data.prompt);
+    // console.log("req.body", data.prompt);
     if (data.prompt) prompt = data.prompt;
   }
 
@@ -73,7 +73,7 @@ export default async function handler(
     appendTime: true,
     videoUrl: videoUrl as string,
   });
-  console.log("promptText", promptText);
+  // console.log("promptText", promptText);
   try {
     // 发起请求到 OpenAI 的接口
     const response = await openai.chat.completions.create({
@@ -88,7 +88,6 @@ export default async function handler(
     // 将数据流式地发送到客户端
     for await (const chunk of response) {
       let message = chunk.choices[0]?.delta?.content || "";
-      console.log(message);
       res.write(`data: ${JSON.stringify(message)}\n\n`);
     }
     res.end();
