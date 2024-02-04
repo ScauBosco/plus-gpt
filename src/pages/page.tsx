@@ -3,7 +3,6 @@ import { NextPage } from "next";
 import Layout from "../components/Layout";
 import styles from "../styles/Home.module.css";
 import axios from "axios";
-import Typewriter from "typewriter-effect";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
