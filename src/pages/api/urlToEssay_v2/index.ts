@@ -22,7 +22,10 @@ const DEFAULT_PROMPT = "期望输出涵盖字幕所有提到的点输出成一�
 const getPromptText = (data: getPromptTextParams) => `
   #第一、markdown形式，返回中文
   #第二、${data.prompt || DEFAULT_PROMPT}
-  ${data.appendTime &&`#第三，列出要点并附上视频时间跳转链接，[time](${data.videoUrl}&t=[time]s)#例如：[3.319](${data.videoUrl}&t=3.319s),[6.96](${data.videoUrl}&t=6.96s)。`}
+  ${
+    data.appendTime &&
+    `#第三，列出要点并附上视频时间跳转链接，[time](${data.videoUrl}&t=[time]s)#例如：[3.319](${data.videoUrl}&t=3.319s),[6.96](${data.videoUrl}&t=6.96s)。`
+  }
   以下是提供的字幕文段:\n
   ${data.captains}
 `;
@@ -52,13 +55,20 @@ export default async function handler(
 
   let { videoUrl = "" } = req.query;
   const videoID = getParameterFromUrl(videoUrl as string, "v"); // 获取视频ID
-  const result: CaptionsItem[] = await getSubtitles({
-    videoID,
-    lang: "en", // 你可以指定你想要的语言
-  });
-  const captionsText = result
-    .map((el) => `${el.text} - time:${el.start}`)
-    .filter((el) => !el.includes("[Music]"));
+
+  let captionsText;
+  try {
+    let result: CaptionsItem[] = await getSubtitles({
+      videoID,
+      lang: "en", // 你可以指定你想要的语言
+    });
+    captionsText = result
+      .map((el) => `${el.text} - time:${el.start}`)
+      .filter((el) => !el.includes("[Music]"));
+  } catch (error) {
+    captionsText = [""];
+  }
+
   const promptText = getPromptText({
     captains: captionsText.join("\n"),
     prompt,
