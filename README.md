@@ -1,8 +1,14 @@
+<!--
+ * @Author: ScauBosco
+ * @Date: 2024-04-16 10:30:50
+ * @LastEditors: ScauBosco
+ * @LastEditTime: 2024-04-16 11:23:17
+-->
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Getting Started123
 
-First, run the development server:
+First123, run the development server:
 
 ```bash
 npm run dev
