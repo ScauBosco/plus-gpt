@@ -2,13 +2,15 @@
  * @Author: ScauBosco
  * @Date: 2024-04-16 10:30:50
  * @LastEditors: ScauBosco
- * @LastEditTime: 2024-04-16 11:31:04
+ * @LastEditTime: 2024-04-16 14:01:51
 -->
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started455
 
 First456, run the development server:
+
+working plus fix!
 
 ```bash
 npm run dev
